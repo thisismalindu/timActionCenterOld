@@ -351,5 +351,9 @@ namespace timActionCenter
         private void button8_Logic(int state) { }
         private void button9_Logic(int state) { }
 
+        private void restartAppToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+        }
     }
 }

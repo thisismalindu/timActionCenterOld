@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.restartAppToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -50,14 +52,34 @@
             this.button9 = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.animationTimer = new System.Windows.Forms.Timer(this.components);
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon
             // 
+            this.notifyIcon.ContextMenuStrip = this.contextMenuStrip;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "Action Center";
             this.notifyIcon.Visible = true;
             this.notifyIcon.Click += new System.EventHandler(this.notifyIcon_Click);
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.BackColor = System.Drawing.SystemColors.Control;
+            this.contextMenuStrip.Font = new System.Drawing.Font("Segoe UI Variable Display", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.restartAppToolStripMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(181, 48);
+            // 
+            // restartAppToolStripMenuItem
+            // 
+            this.restartAppToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.restartAppToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.restartAppToolStripMenuItem.Name = "restartAppToolStripMenuItem";
+            this.restartAppToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.restartAppToolStripMenuItem.Text = "Restart App";
+            this.restartAppToolStripMenuItem.Click += new System.EventHandler(this.restartAppToolStripMenuItem_Click);
             // 
             // button1
             // 
@@ -343,6 +365,7 @@
             this.Text = "Action Center";
             this.TopMost = true;
             this.Deactivate += new System.EventHandler(this.Form1_Deactivate);
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -370,5 +393,7 @@
         private Button button9;
         private Label label9;
         private System.Windows.Forms.Timer animationTimer;
+        private ContextMenuStrip contextMenuStrip;
+        private ToolStripMenuItem restartAppToolStripMenuItem;
     }
 }
