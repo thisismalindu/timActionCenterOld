@@ -11,6 +11,10 @@ So it came to my mind, that there would be more stuff like this that other peopl
 
 This would stay in the tray icon just like how EarTrumpet works. I am using Winforms, so the UI won't look good as WinUI, but it will look quite good.
 
+![image](https://i.imgur.com/KbolPee.gif)
+
+Oh, oh! it knows your System Accent Color too!
+
 ## Download
 ### Currently : 
 
