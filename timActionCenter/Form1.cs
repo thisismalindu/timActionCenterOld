@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static System.Windows.Forms.AxHost;
 
 namespace timActionCenter
 {
@@ -49,7 +50,7 @@ namespace timActionCenter
             InitializeComponent();
             this.Location = new System.Drawing.Point(Screen.PrimaryScreen.WorkingArea.Width - (this.Width + 10), Screen.PrimaryScreen.Bounds.Height);
             hidden = true;
-
+            this.Hide();
             // ROUNDED CORNERS STUFF COPIED FROM MS DOCS
             var attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
             var preference = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
@@ -255,19 +256,111 @@ namespace timActionCenter
         // When Clicked on Tray Icon
         private void notifyIcon_Click(object sender, EventArgs e)
         {
+
+            updateControls();
             animationTimer.Start();
             this.Focus();
+        }
+
+        //Checks System Settings and updates UI
+        private void updateControls()
+        {
+            updateButton1();
+        }
+
+        //Updates Button1
+        private void updateButton1()
+        {
+            RegistryKey k = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default);
+            var wr = k.OpenSubKey(@"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
+
+            var state = wr.GetValue("ProxyEnable");
+            if (state.ToString() == "1")
+            {
+                button1.BackColor = themeColor;
+                button1.FlatAppearance.BorderColor = Color.FromArgb(themeColor.R + 5, themeColor.G + 5, themeColor.B + 5);
+                button1.FlatAppearance.MouseDownBackColor = Color.FromArgb(themeColor.R + 5, themeColor.G + 5, themeColor.B + 5);
+                button1.FlatAppearance.MouseOverBackColor = Color.FromArgb(themeColor.R - 10, themeColor.G - 10, themeColor.B - 10);
+            }
+            else
+            {
+                button1.BackColor = Color.FromArgb(55, 55, 55);
+                button1.FlatAppearance.BorderColor = Color.FromArgb(60, 60, 60);
+                button1.FlatAppearance.MouseDownBackColor = Color.FromArgb(60, 60, 60);
+                button1.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
+            }
+        }
+        //Updates Button2
+        private void updateButton2()
+        {
+
+            RegistryKey k = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default);
+            var wr = k.OpenSubKey(@"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", true);
+            var stateSys = wr.GetValue("SystemUsesLightTheme");
+            var stateApps = wr.GetValue("AppsUseLightTheme");
+
+            if (stateSys.ToString() == "1" || stateApps.ToString() == "1")
+            {
+                button2.Text = "";
+                button2.BackColor = themeColor;
+                button2.FlatAppearance.BorderColor = Color.FromArgb(themeColor.R + 5, themeColor.G + 5, themeColor.B + 5);
+                button2.FlatAppearance.MouseDownBackColor = Color.FromArgb(themeColor.R + 5, themeColor.G + 5, themeColor.B + 5);
+                button2.FlatAppearance.MouseOverBackColor = Color.FromArgb(themeColor.R - 10, themeColor.G - 10, themeColor.B - 10);
+            }
+            else
+            {
+                button2.Text = "";
+                button2.BackColor = Color.FromArgb(55, 55, 55);
+                button2.FlatAppearance.BorderColor = Color.FromArgb(60, 60, 60);
+                button2.FlatAppearance.MouseDownBackColor = Color.FromArgb(60, 60, 60);
+                button2.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
+            }
+        }
+        //Updates Button3
+        private void updateButton3()
+        {
+
+        }
+        //Updates Button4
+        private void updateButton4()
+        {
+
+        }
+        //Updates Button5
+        private void updateButton5()
+        {
+
+        }
+        //Updates Button6
+        private void updateButton6()
+        {
+
+        }
+        //Updates Button7
+        private void updateButton7()
+        {
+
+        }
+        //Updates Button8
+        private void updateButton8()
+        {
+
+        }
+        //Updates Button9
+        private void updateButton9()
+        {
+
         }
 
         // This animates the form's entrance and exit
         private void animationTimer_Tick(object sender, EventArgs e)
         {
 
-            int animationSpeed = 50;
+            int animationSpeed = 60;
 
             if (hidden)
             {
-
+                this.Show();
                 if (this.Top <= (Screen.PrimaryScreen.WorkingArea.Height - (this.Height - 40)))
                 {
                     this.Top = Screen.PrimaryScreen.WorkingArea.Height - (this.Height + 10);
@@ -281,11 +374,10 @@ namespace timActionCenter
             }
             else
             {
-
                 if (this.Top >= (Screen.PrimaryScreen.Bounds.Height))
                 {
                     this.Top = Screen.PrimaryScreen.Bounds.Height;
-
+                    this.Hide();
                     hidden = true;
                     animationTimer.Stop();
                 }
@@ -313,6 +405,44 @@ namespace timActionCenter
             // Has some quirks.
             // This app is always dark, sucks.
             // Has to restart explorer to make changes to system.
+
+            string wallpaperPath = "";
+            string darkThemePath = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + "\\Resources\\Themes\\dark.theme";
+            string lightThemePath = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + "\\Resources\\Themes\\light.theme";
+
+            string customThemePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Microsoft\Windows\Themes\Custom.theme";
+
+            StreamReader streamReader = new StreamReader(customThemePath);
+
+            while (!streamReader.EndOfStream)
+            {
+                string temp = streamReader.ReadLine();
+                if (temp.Contains("Wallpaper="))
+                {
+                    wallpaperPath = temp.Substring(10);
+                    break;
+                }
+            }
+
+            streamReader.Close();
+            Wallpaper.Set(wallpaperPath, Wallpaper.Style.Centered);
+            return;
+
+            if (state == 1)
+            {
+                Process.Start("Invoke-Expression " + lightThemePath);
+                button2.Text = "";
+
+            }
+            else
+            {
+                Process.Start(darkThemePath);
+                button2.Text = "";
+
+            }
+
+            return;
+
 
             if (button2.BackColor == Color.FromArgb(55, 55, 55))
             {
@@ -354,6 +484,11 @@ namespace timActionCenter
         private void restartAppToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Restart();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
